@@ -1,6 +1,6 @@
 {
   "name": "square-reader-capacitor-plugin",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Capacitor.js plugin for using the Square Card Reader SDK",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "SquareCapacitorPlugin.podspec"
+    "SquareReaderCapacitorPlugin.podspec"
   ],
   "author": "Braelyn Boynton",
   "license": "MIT",

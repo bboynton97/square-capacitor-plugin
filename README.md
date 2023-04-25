@@ -1,4 +1,4 @@
-# square-capacitor-plugin
+# square-reader-capacitor-plugin
 
 Capacitor.js plugin for using the Square Card Reader SDK
 

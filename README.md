@@ -11,9 +11,67 @@ npx cap sync
 
 ## API
 
-<docgen-index></docgen-index>
+<docgen-index>
+
+* [`pluginTest()`](#plugintest)
+* [`isAuthNeeded()`](#isauthneeded)
+* [`authorizeReaderSdk(...)`](#authorizereadersdk)
+* [`startCheckout(...)`](#startcheckout)
+
+</docgen-index>
 
 <docgen-api>
-<!-- run docgen to generate docs from the source -->
-<!-- More info: https://github.com/ionic-team/capacitor-docgen -->
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### pluginTest()
+
+```typescript
+pluginTest() => Promise<{ value: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### isAuthNeeded()
+
+```typescript
+isAuthNeeded() => Promise<{ authorized: boolean; }>
+```
+
+**Returns:** <code>Promise&lt;{ authorized: boolean; }&gt;</code>
+
+--------------------
+
+
+### authorizeReaderSdk(...)
+
+```typescript
+authorizeReaderSdk(options: { auth_code: string; }) => Promise<{ success: boolean; }>
+```
+
+| Param         | Type                                |
+| ------------- | ----------------------------------- |
+| **`options`** | <code>{ auth_code: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ success: boolean; }&gt;</code>
+
+--------------------
+
+
+### startCheckout(...)
+
+```typescript
+startCheckout(options: { amount: number; }) => Promise<{ success: boolean; }>
+```
+
+| Param         | Type                             |
+| ------------- | -------------------------------- |
+| **`options`** | <code>{ amount: number; }</code> |
+
+**Returns:** <code>Promise&lt;{ success: boolean; }&gt;</code>
+
+--------------------
+
 </docgen-api>

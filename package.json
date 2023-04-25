@@ -1,5 +1,5 @@
 {
-  "name": "square-capacitor-plugin",
+  "name": "square-reader-capacitor-plugin",
   "version": "0.0.1",
   "description": "Capacitor.js plugin for using the Square Card Reader SDK",
   "main": "dist/plugin.cjs.js",
@@ -23,6 +23,7 @@
     "url": "https://github.com/bboynton97/square-capacitor-plugin/issues"
   },
   "keywords": [
+    "square",
     "capacitor",
     "plugin",
     "native"

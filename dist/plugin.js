@@ -10,7 +10,7 @@ var capacitorSquare = (function (exports, core) {
         authorizeReaderSdk(options) {
             throw new Error("Web not supported");
         }
-        isAuthNeeded() {
+        isAuthorized() {
             throw new Error("Web not supported");
         }
         // @ts-ignore

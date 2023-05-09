@@ -4,7 +4,7 @@ export class SquareWeb extends WebPlugin {
     authorizeReaderSdk(options) {
         throw new Error("Web not supported");
     }
-    isAuthNeeded() {
+    isAuthorized() {
         throw new Error("Web not supported");
     }
     // @ts-ignore

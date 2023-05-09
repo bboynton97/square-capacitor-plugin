@@ -6,7 +6,7 @@ export declare class SquareWeb extends WebPlugin implements SquarePlugin {
     }): Promise<{
         success: boolean;
     }>;
-    isAuthNeeded(): Promise<{
+    isAuthorized(): Promise<{
         authorized: boolean;
     }>;
     startCheckout(options: {

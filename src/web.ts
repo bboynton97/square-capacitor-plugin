@@ -9,7 +9,7 @@ export class SquareWeb extends WebPlugin implements SquarePlugin {
     throw new Error("Web not supported")
   }
 
-  isAuthNeeded(): Promise<{ authorized: boolean }> {
+  isAuthorized(): Promise<{ authorized: boolean }> {
     throw new Error("Web not supported")
   }
 

@@ -1,27 +1,36 @@
 import Foundation
 import Capacitor
+import SquareReaderSDK
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitorjs.com/docs/plugins/ios
  */
+
 @objc(SquareReaderPlugin)
 public class SquareReaderPlugin: CAPPlugin {
-    private let implementation = Square()
+    //private let implementation = Square()
+
+    func initialize(launchOptions: [UIApplication.LaunchOptionsKey : Any]) {
+        SQRDReaderSDK.initialize(applicationLaunchOptions: launchOptions)
+    }
 
     @objc func pluginTest(_ call: CAPPluginCall) {
             print("hit function")
             call.resolve(["value": "toost"])
         }
 
-        @objc func isAuthNeeded(_ call: CAPPluginCall) {
-            call.resolve([
-                "authorized": SQRDReaderSDK.shared.isAuthorized
-            ])
+        @objc func isAuthorized(_ call: CAPPluginCall) {
+            DispatchQueue.main.async {
+                call.resolve([
+                    "authorized": SQRDReaderSDK.shared.isAuthorized
+                ])
+            }
         }
 
         @objc func authorizeReaderSdk(_ call: CAPPluginCall) {
             let authCode = call.getString("auth_code") ?? ""
+            /*
             SQRDReaderSDK.shared.authorize(withCode: authCode) { _, error in
 
                 if let authError = error {
@@ -32,7 +41,8 @@ public class SquareReaderPlugin: CAPPlugin {
                     // Proceed to the main application interface.
                     return call.resolve(["success": true])
                 }
-            }
+            }*/
+            return call.resolve(["success": true])
         }
 
         @objc func startCheckout(_ call: CAPPluginCall) {
@@ -42,10 +52,10 @@ public class SquareReaderPlugin: CAPPlugin {
             }
 
             // Create a money amount in the currency of the authorized Square account
-            let amountMoney = SQRDMoney(amount: amountCents!)
+            //let amountMoney = SQRDMoney(amount: amountCents!)
 
             // Create parameters to customize the behavior of the checkout flow.
-            let params = SQRDCheckoutParameters(amountMoney: amountMoney)
+            //let params = SQRDCheckoutParameters(amountMoney: amountMoney)
     //        params.additionalPaymentTypes = [.]
 
             // Create a checkout controller and call present to start checkout flow.
@@ -56,3 +66,4 @@ public class SquareReaderPlugin: CAPPlugin {
     //        checkoutController.present(from: self)
         }
 }
+

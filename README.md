@@ -9,12 +9,16 @@ npm install square-capacitor-plugin
 npx cap sync
 ```
 
+In your iOS project, add the SquareReaderSDK from these docs: https://developer.squareup.com/docs/reader-sdk/build-on-ios
+
+Make sure to add the initialization line to the application delegate: https://developer.squareup.com/docs/reader-sdk/build-on-ios#step-6-add-code-to-initialize-the-reader-sdk
+
 ## API
 
 <docgen-index>
 
 * [`pluginTest()`](#plugintest)
-* [`isAuthNeeded()`](#isauthneeded)
+* [`isAuthorized()`](#isauthorized)
 * [`authorizeReaderSdk(...)`](#authorizereadersdk)
 * [`startCheckout(...)`](#startcheckout)
 
@@ -34,10 +38,10 @@ pluginTest() => Promise<{ value: string; }>
 --------------------
 
 
-### isAuthNeeded()
+### isAuthorized()
 
 ```typescript
-isAuthNeeded() => Promise<{ authorized: boolean; }>
+isAuthorized() => Promise<{ authorized: boolean; }>
 ```
 
 **Returns:** <code>Promise&lt;{ authorized: boolean; }&gt;</code>

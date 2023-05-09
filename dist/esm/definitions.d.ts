@@ -2,7 +2,7 @@ export interface SquarePlugin {
     pluginTest(): Promise<{
         value: string;
     }>;
-    isAuthNeeded(): Promise<{
+    isAuthorized(): Promise<{
         authorized: boolean;
     }>;
     authorizeReaderSdk(options: {

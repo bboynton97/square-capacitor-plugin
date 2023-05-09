@@ -16,14 +16,14 @@
         "slug": "plugintest"
       },
       {
-        "name": "isAuthNeeded",
+        "name": "isAuthorized",
         "signature": "() => Promise<{ authorized: boolean; }>",
         "parameters": [],
         "returns": "Promise<{ authorized: boolean; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "isauthneeded"
+        "slug": "isauthorized"
       },
       {
         "name": "authorizeReaderSdk",

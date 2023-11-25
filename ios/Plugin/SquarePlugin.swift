@@ -30,9 +30,7 @@ public class SquareReaderPlugin: CAPPlugin {
 
         @objc func authorizeReaderSdk(_ call: CAPPluginCall) {
             let authCode = call.getString("auth_code") ?? ""
-            /*
             SQRDReaderSDK.shared.authorize(withCode: authCode) { _, error in
-
                 if let authError = error {
                     // Handle the error
                     print(authError)
@@ -41,8 +39,7 @@ public class SquareReaderPlugin: CAPPlugin {
                     // Proceed to the main application interface.
                     return call.resolve(["success": true])
                 }
-            }*/
-            return call.resolve(["success": true])
+            }
         }
 
         @objc func startCheckout(_ call: CAPPluginCall) {

@@ -1,6 +1,7 @@
 import Foundation
 import Capacitor
 import SquareReaderSDK
+import CoreBluetooth
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -10,9 +11,20 @@ import SquareReaderSDK
 @objc(SquareReaderPlugin)
 public class SquareReaderPlugin: CAPPlugin {
     //private let implementation = Square()
+    var bluetoothManager: CBManager?
 
     func initialize(launchOptions: [UIApplication.LaunchOptionsKey : Any]) {
         SQRDReaderSDK.initialize(applicationLaunchOptions: launchOptions)
+    }
+
+    func requestBluetoothPermissions() {
+        if bluetoothManager == nil ||
+            bluetoothManager!.authorization == .notDetermined {
+
+            // Initializing CBCentralManager results in a prompt asking the user
+            // to grant access if the authorization status is `.notDetermined`.
+            bluetoothManager = CBCentralManager()
+        }
     }
 
     @objc func pluginTest(_ call: CAPPluginCall) {
@@ -62,5 +74,7 @@ public class SquareReaderPlugin: CAPPlugin {
     //        )
     //        checkoutController.present(from: self)
         }
+
+
 }
 

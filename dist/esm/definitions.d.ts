@@ -1,12 +1,15 @@
 export interface ISquareReaderSDK2Plugin {
+    initialize(options: {
+        app_id: string;
+    }): Promise<{
+        success: boolean;
+    }>;
     pluginTest(): Promise<{
         value: string;
     }>;
-    isAuthorized(): Promise<{
-        authorized: boolean;
-    }>;
     authorizeReaderSdk(options: {
         auth_code: string;
+        loc_id: string;
     }): Promise<{
         success: boolean;
     }>;

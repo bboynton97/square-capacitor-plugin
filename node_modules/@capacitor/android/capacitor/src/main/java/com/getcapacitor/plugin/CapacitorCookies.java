@@ -21,7 +21,7 @@ public class CapacitorCookies extends Plugin {
     public void load() {
         this.bridge.getWebView().addJavascriptInterface(this, "CapacitorCookiesAndroidInterface");
         this.cookieManager = new CapacitorCookieManager(null, java.net.CookiePolicy.ACCEPT_ALL, this.bridge);
-        CookieHandler.setDefault(cookieManager);
+        CookieHandler.setDefault(this.cookieManager);
         super.load();
     }
 

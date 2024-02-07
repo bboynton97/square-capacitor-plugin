@@ -1,10 +1,11 @@
 import { WebPlugin } from '@capacitor/core';
 export class SquareReaderSDK2Plugin extends WebPlugin {
     // @ts-ignore
-    authorizeReaderSdk(options) {
-        throw new Error("Web not supported");
+    initialize(options) {
+        throw new Error('Web not supported');
     }
-    isAuthorized() {
+    // @ts-ignore
+    authorizeReaderSdk(options) {
         throw new Error("Web not supported");
     }
     // @ts-ignore

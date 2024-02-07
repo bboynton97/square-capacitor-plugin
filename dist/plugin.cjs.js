@@ -10,10 +10,11 @@ const SquareReaderSDK2Plugin$1 = core.registerPlugin('SquareReaderSDK2Plugin', {
 
 class SquareReaderSDK2Plugin extends core.WebPlugin {
     // @ts-ignore
-    authorizeReaderSdk(options) {
-        throw new Error("Web not supported");
+    initialize(options) {
+        throw new Error('Web not supported');
     }
-    isAuthorized() {
+    // @ts-ignore
+    authorizeReaderSdk(options) {
         throw new Error("Web not supported");
     }
     // @ts-ignore

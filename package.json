@@ -1,6 +1,6 @@
 {
   "name": "square-reader-capacitor-plugin",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Capacitor.js plugin for using the Square Card Reader SDK",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -75,5 +75,8 @@
     "android": {
       "src": "android"
     }
+  },
+  "dependencies": {
+    "square-reader-capacitor-plugin": "^0.0.10"
   }
 }

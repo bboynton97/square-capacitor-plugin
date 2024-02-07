@@ -1,4 +1,4 @@
-import type { SquarePlugin } from './definitions';
-declare const Square: SquarePlugin;
+import type { ISquareReaderSDK2Plugin } from './definitions';
+declare const SquareReaderSDK2Plugin: ISquareReaderSDK2Plugin;
 export * from './definitions';
-export { Square };
+export { SquareReaderSDK2Plugin };

@@ -1,11 +1,11 @@
 var capacitorSquare = (function (exports, core) {
     'use strict';
 
-    const Square = core.registerPlugin('Square', {
-        web: () => Promise.resolve().then(function () { return web; }).then(m => new m.SquareWeb()),
+    const SquareReaderSDK2Plugin$1 = core.registerPlugin('SquareReaderSDK2Plugin', {
+        web: () => Promise.resolve().then(function () { return web; }).then(m => new m.SquareReaderSDK2Plugin()),
     });
 
-    class SquareWeb extends core.WebPlugin {
+    class SquareReaderSDK2Plugin extends core.WebPlugin {
         // @ts-ignore
         authorizeReaderSdk(options) {
             throw new Error("Web not supported");
@@ -24,10 +24,10 @@ var capacitorSquare = (function (exports, core) {
 
     var web = /*#__PURE__*/Object.freeze({
         __proto__: null,
-        SquareWeb: SquareWeb
+        SquareReaderSDK2Plugin: SquareReaderSDK2Plugin
     });
 
-    exports.Square = Square;
+    exports.SquareReaderSDK2Plugin = SquareReaderSDK2Plugin$1;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

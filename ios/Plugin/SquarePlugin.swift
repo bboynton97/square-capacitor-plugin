@@ -1,6 +1,6 @@
 import Foundation
 import Capacitor
-import SquareReaderSDK
+import ReaderSDK2
 import CoreBluetooth
 
 /**
@@ -8,13 +8,21 @@ import CoreBluetooth
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 
-@objc(SquareReaderPlugin)
+@objc(SquareReaderSDK2Plugin)
 public class SquareReaderPlugin: CAPPlugin {
     //private let implementation = Square()
     var bluetoothManager: CBManager?
 
-    func initialize(launchOptions: [UIApplication.LaunchOptionsKey : Any]) {
-        SQRDReaderSDK.initialize(applicationLaunchOptions: launchOptions)
+    @objc  func initialize(_ call: CAPPluginCall) {
+        let appId = call.getString("app_id") ?? ""
+        DispatchQueue.main.async {
+            ReaderSDK.initialize(
+                applicationLaunchOptions: nil,
+                //                squareApplicationID: "sq0idp-7-D3qCLWQqCixebh8mfV3Q"
+                squareApplicationID: appId
+            )
+        }
+        call.resolve(["success": true])
     }
 
     func requestBluetoothPermissions() {
@@ -28,52 +36,50 @@ public class SquareReaderPlugin: CAPPlugin {
     }
 
     @objc func pluginTest(_ call: CAPPluginCall) {
-            print("hit function")
-            call.resolve(["value": "toost"])
-        }
+        print("hit function")
+        call.resolve(["value": "toost"])
+    }
 
-        @objc func isAuthorized(_ call: CAPPluginCall) {
-            DispatchQueue.main.async {
-                call.resolve([
-                    "authorized": SQRDReaderSDK.shared.isAuthorized
-                ])
-            }
+    @objc func authorizeReaderSdk(_ call: CAPPluginCall) {
+        let authCode = call.getString("auth_code") ?? ""
+        let locationId = call.getString("loc_id") ?? ""
+        guard ReaderSDK.shared.authorizationManager.state == .notAuthorized else {
+            return
         }
-
-        @objc func authorizeReaderSdk(_ call: CAPPluginCall) {
-            let authCode = call.getString("auth_code") ?? ""
-            SQRDReaderSDK.shared.authorize(withCode: authCode) { _, error in
-                if let authError = error {
-                    // Handle the error
-                    print(authError)
-                    return call.resolve(["success": false])
-                } else {
-                    // Proceed to the main application interface.
-                    return call.resolve(["success": true])
+        
+        ReaderSDK.shared.authorizationManager.authorize(
+            withAccessToken: authCode,
+            locationID: locationId) { error in
+                guard let authError = error else {
+                    print("Reader SDK successfully authorized.")
+                    return
                 }
-            }
+
+                // Handle auth error
+                print("error: \(authError.localizedDescription)")
+        }
+    }
+
+    @objc func startCheckout(_ call: CAPPluginCall) {
+        let amountCents = call.getInt("amount")
+        if amountCents == nil {
+            return call.reject("Missing amount")
         }
 
-        @objc func startCheckout(_ call: CAPPluginCall) {
-            let amountCents = call.getInt("amount")
-            if amountCents == nil {
-                return call.reject("Missing amount")
-            }
+        // Create a money amount in the currency of the authorized Square account
+        //let amountMoney = SQRDMoney(amount: amountCents!)
 
-            // Create a money amount in the currency of the authorized Square account
-            //let amountMoney = SQRDMoney(amount: amountCents!)
+        // Create parameters to customize the behavior of the checkout flow.
+        //let params = SQRDCheckoutParameters(amountMoney: amountMoney)
+//        params.additionalPaymentTypes = [.]
 
-            // Create parameters to customize the behavior of the checkout flow.
-            //let params = SQRDCheckoutParameters(amountMoney: amountMoney)
-    //        params.additionalPaymentTypes = [.]
-
-            // Create a checkout controller and call present to start checkout flow.
-    //        let checkoutController = SQRDCheckoutController(
-    //            parameters: params,
-    //            delegate: self
-    //        )
-    //        checkoutController.present(from: self)
-        }
+        // Create a checkout controller and call present to start checkout flow.
+//        let checkoutController = SQRDCheckoutController(
+//            parameters: params,
+//            delegate: self
+//        )
+//        checkoutController.present(from: self)
+    }
 
 
 }

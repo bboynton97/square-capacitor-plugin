@@ -1,7 +1,7 @@
 import { registerPlugin } from '@capacitor/core';
-const Square = registerPlugin('Square', {
-    web: () => import('./web').then(m => new m.SquareWeb()),
+const SquareReaderSDK2Plugin = registerPlugin('SquareReaderSDK2Plugin', {
+    web: () => import('./web').then(m => new m.SquareReaderSDK2Plugin()),
 });
 export * from './definitions';
-export { Square };
+export { SquareReaderSDK2Plugin };
 //# sourceMappingURL=index.js.map

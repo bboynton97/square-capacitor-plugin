@@ -1,10 +1,10 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { SquarePlugin } from './definitions';
+import type { ISquareReaderSDK2Plugin } from './definitions';
 
-const Square = registerPlugin<SquarePlugin>('Square', {
-  web: () => import('./web').then(m => new m.SquareWeb()),
+const SquareReaderSDK2Plugin = registerPlugin<ISquareReaderSDK2Plugin>('SquareReaderSDK2Plugin', {
+  web: () => import('./web').then(m => new m.SquareReaderSDK2Plugin()),
 });
 
 export * from './definitions';
-export { Square };
+export { SquareReaderSDK2Plugin };

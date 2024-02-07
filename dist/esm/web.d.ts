@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
-import type { SquarePlugin } from './definitions';
-export declare class SquareWeb extends WebPlugin implements SquarePlugin {
+import type { ISquareReaderSDK2Plugin } from './definitions';
+export declare class SquareReaderSDK2Plugin extends WebPlugin implements ISquareReaderSDK2Plugin {
     authorizeReaderSdk(options: {
         auth_code: string;
     }): Promise<{

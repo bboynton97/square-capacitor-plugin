@@ -1,4 +1,4 @@
-export interface SquarePlugin {
+export interface ISquareReaderSDK2Plugin {
     pluginTest(): Promise<{
         value: string;
     }>;

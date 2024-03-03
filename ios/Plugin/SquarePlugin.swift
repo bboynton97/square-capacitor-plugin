@@ -36,7 +36,7 @@ public class SquareReaderPlugin: CAPPlugin {
     }
 
     @objc func pluginTest(_ call: CAPPluginCall) {
-        print("hit function")
+        print("📱 hit function")
         call.resolve(["value": "toost"])
     }
 
@@ -44,19 +44,21 @@ public class SquareReaderPlugin: CAPPlugin {
         let authCode = call.getString("auth_code") ?? ""
         let locationId = call.getString("loc_id") ?? ""
         guard ReaderSDK.shared.authorizationManager.state == .notAuthorized else {
-            return
+            print("📱 Already authorized")
+            return call.resolve(["success": true])
         }
         
         ReaderSDK.shared.authorizationManager.authorize(
             withAccessToken: authCode,
             locationID: locationId) { error in
                 guard let authError = error else {
-                    print("Reader SDK successfully authorized.")
-                    return
+                    print("📱 Reader SDK successfully authorized.")
+                    return call.resolve(["success": true])
                 }
 
                 // Handle auth error
                 print("error: \(authError.localizedDescription)")
+                call.resolve(["success": false])
         }
     }
 

@@ -88,6 +88,7 @@ public class SquareReaderPlugin: CAPPlugin {
     }
 
     @objc func startPairingReader(_ call: CAPPluginCall) {
+        // TODO: this is being called but then the callback handlers from the ReaderDelegate are not being called
         print("📱 startPairingReader")
         self.requestBluetoothPermissions()
         pairingHandle = ReaderSDK.shared.readerManager.startPairing(with: self)

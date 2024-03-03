@@ -22,4 +22,16 @@ export class SquareReaderSDK2Plugin extends WebPlugin implements ISquareReaderSD
   pluginTest(): Promise<{ value: string }> {
     return Promise.resolve({value: "toost"});
   }
+
+  getReaderStatus(): Promise<{ status: string; error: string }> {
+    return Promise.resolve({error: "", status: ""});
+  }
+
+  startPairingReader(): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  stopPairingReader(): Promise<void> {
+    return Promise.resolve(undefined);
+  }
 }

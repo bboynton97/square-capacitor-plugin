@@ -12,8 +12,12 @@ import CoreBluetooth
 public class SquareReaderPlugin: CAPPlugin {
     //private let implementation = Square()
     var bluetoothManager: CBManager?
+    private var pairingHandle: PairingHandle?
+    var readerStatus: String = "disconnected"
+    var readerError: String = ""
 
     @objc  func initialize(_ call: CAPPluginCall) {
+        print("~~ initializing ~~")
         let appId = call.getString("app_id") ?? ""
         DispatchQueue.main.async {
             ReaderSDK.initialize(
@@ -83,6 +87,37 @@ public class SquareReaderPlugin: CAPPlugin {
 //        checkoutController.present(from: self)
     }
 
+    @objc func startPairingReader(_ call: CAPPluginCall) {
+        print("📱 startPairingReader")
+        self.requestBluetoothPermissions()
+        pairingHandle = ReaderSDK.shared.readerManager.startPairing(with: self)
+        call.resolve()
+    }
 
+    @objc func stopPairingReader(_ call: CAPPluginCall) {
+        pairingHandle?.stop()
+        call.resolve()
+    }
+    
+    @objc func getReaderStatus(_ call: CAPPluginCall) {
+        call.resolve(["status":readerStatus, "error":readerError])
+    }
 }
 
+extension SquareReaderPlugin: ReaderPairingDelegate {
+    public func readerPairingDidBegin() {
+        print("📱 !! pairing did begin")
+        readerStatus = "searching"
+    }
+    
+    public func readerPairingDidSucceed() {
+        print("📱 !! paired!")
+        readerStatus = "connected"
+    }
+    
+    public func readerPairingDidFailWithError(_ error: Error) {
+        print("📱 failed to pair")
+        readerStatus = "failed"
+        readerError = error.localizedDescription
+    }
+}

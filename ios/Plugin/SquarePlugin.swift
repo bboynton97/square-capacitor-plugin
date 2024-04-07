@@ -2,6 +2,7 @@ import Foundation
 import Capacitor
 import ReaderSDK2
 import CoreBluetooth
+//import ReaderSDK2UI
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -61,7 +62,7 @@ public class SquareReaderPlugin: CAPPlugin {
                 }
 
                 // Handle auth error
-                print("error: \(authError.localizedDescription)")
+                print("📱 ReaderSDK authorization error: \(authError.localizedDescription)")
                 call.resolve(["success": false])
         }
     }
@@ -103,6 +104,24 @@ public class SquareReaderPlugin: CAPPlugin {
     @objc func getReaderStatus(_ call: CAPPluginCall) {
         call.resolve(["status":readerStatus, "error":readerError])
     }
+    
+//    func showReaders() {
+//            let readerManager = ReaderSDK.shared.readerManager
+//
+//
+//            let readersVC = ReadersViewController(theme: Config.theme, readerManager: readerManager)
+//            readersVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
+//                barButtonSystemItem: .done,
+//                target: self,
+//                action: #selector(didTapDismissReaders)
+//            )
+//
+//            present(
+//                UINavigationController(rootViewController: readersVC),
+//                animated: true,
+//                completion: nil
+//            )
+//        }
 }
 
 extension SquareReaderPlugin: ReaderPairingDelegate {

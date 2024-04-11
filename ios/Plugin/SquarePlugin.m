@@ -11,4 +11,6 @@ CAP_PLUGIN(SquareReaderSDK2Plugin, "SquareReaderSDK2Plugin",
            CAP_PLUGIN_METHOD(startPairingReader, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(stopPairingReader, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getReaderStatus, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(identify, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(connectedReadersCount, CAPPluginReturnPromise);
 )

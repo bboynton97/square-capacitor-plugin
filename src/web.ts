@@ -34,4 +34,12 @@ export class SquareReaderSDK2Plugin extends WebPlugin implements ISquareReaderSD
   stopPairingReader(): Promise<void> {
     return Promise.resolve(undefined);
   }
+
+  identify() {
+    return
+  }
+
+  connectedReadersCount() {
+    return Promise.resolve({readers: 0})
+  }
 }

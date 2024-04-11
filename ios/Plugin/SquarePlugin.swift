@@ -66,6 +66,23 @@ public class SquareReaderPlugin: CAPPlugin {
                 call.resolve(["success": false])
         }
     }
+    
+    @objc func identify(_ call: CAPPluginCall) {
+        let readers = ReaderSDK.shared.readerManager.readers
+        if (readers.count > 0) {
+            let reader = readers[0]
+            ReaderSDK.shared.readerManager.blink(reader)
+        }
+         // `ledController` controls the LEDs on the Reader.
+         // `nil` if the reader doesn't have LEDs.
+    }
+    
+    @objc func connectedReadersCount(_ call: CAPPluginCall) {
+        // You can access all connected readers via
+        // `ReaderSDK.shared.readerManager.readers`
+        print(ReaderSDK.shared.readerManager.readers)
+        call.resolve(["readers":ReaderSDK.shared.readerManager.readers.count])
+    }
 
     @objc func startCheckout(_ call: CAPPluginCall) {
         let amountCents = call.getInt("amount")

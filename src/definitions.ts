@@ -6,4 +6,6 @@ export interface ISquareReaderSDK2Plugin {
   startPairingReader(): Promise<void>;
   stopPairingReader(): Promise<void>;
   getReaderStatus(): Promise<{status: string, error: string}>;
+  identify(): void;
+  connectedReadersCount(): Promise<{readers: number}>
 }

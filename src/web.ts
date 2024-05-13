@@ -42,4 +42,9 @@ export class SquareReaderSDK2Plugin extends WebPlugin implements ISquareReaderSD
   connectedReadersCount() {
     return Promise.resolve({readers: 0})
   }
+
+  startPayment(options: {money: number, orderId: string}) {
+    console.info(options)
+    return Promise.resolve()
+  }
 }

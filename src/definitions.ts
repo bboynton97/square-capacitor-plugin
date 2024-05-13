@@ -8,4 +8,5 @@ export interface ISquareReaderSDK2Plugin {
   getReaderStatus(): Promise<{status: string, error: string}>;
   identify(): void;
   connectedReadersCount(): Promise<{readers: number}>
+  startPayment(options: {money: number, orderId: string}): Promise<void>
 }

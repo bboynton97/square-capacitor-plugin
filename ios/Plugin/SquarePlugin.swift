@@ -2,7 +2,7 @@ import Foundation
 import Capacitor
 import ReaderSDK2
 import CoreBluetooth
-//import ReaderSDK2UI
+import CoreLocation
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -27,6 +27,7 @@ public class SquareReaderPlugin: CAPPlugin {
                 squareApplicationID: appId
             )
         }
+        self.requestLocationPermission()
         call.resolve(["success": true])
     }
 
@@ -39,10 +40,35 @@ public class SquareReaderPlugin: CAPPlugin {
             bluetoothManager = CBCentralManager()
         }
     }
+    
+    private lazy var locationManager = CLLocationManager()
+
+       func requestLocationPermission() {
+           switch CLLocationManager.authorizationStatus() {
+           case .notDetermined:
+               locationManager.requestWhenInUseAuthorization()
+           case .restricted, .denied:
+               print("Show UI directing the user to the iOS Settings app")
+           case .authorizedAlways, .authorizedWhenInUse:
+               print("Location services have already been authorized.")
+           @unknown default:
+               fatalError()
+           }
+       }
 
     @objc func pluginTest(_ call: CAPPluginCall) {
         print("📱 hit function")
         call.resolve(["value": "toost"])
+    }
+
+    func getTopViewController() -> UIViewController? {
+        if var topController = UIApplication.shared.keyWindow?.rootViewController {
+            while let presentedViewController = topController.presentedViewController {
+                topController = presentedViewController
+            }
+            return topController
+        }
+        return nil
     }
 
     @objc func authorizeReaderSdk(_ call: CAPPluginCall) {
@@ -89,26 +115,13 @@ public class SquareReaderPlugin: CAPPlugin {
         if amountCents == nil {
             return call.reject("Missing amount")
         }
-
-        // Create a money amount in the currency of the authorized Square account
-        //let amountMoney = SQRDMoney(amount: amountCents!)
-
-        // Create parameters to customize the behavior of the checkout flow.
-        //let params = SQRDCheckoutParameters(amountMoney: amountMoney)
-//        params.additionalPaymentTypes = [.]
-
-        // Create a checkout controller and call present to start checkout flow.
-//        let checkoutController = SQRDCheckoutController(
-//            parameters: params,
-//            delegate: self
-//        )
-//        checkoutController.present(from: self)
     }
 
     @objc func startPairingReader(_ call: CAPPluginCall) {
         // TODO: this is being called but then the callback handlers from the ReaderDelegate are not being called
         print("📱 startPairingReader")
         self.requestBluetoothPermissions()
+        self.requestLocationPermission()
         pairingHandle = ReaderSDK.shared.readerManager.startPairing(with: self)
         call.resolve()
     }
@@ -122,23 +135,39 @@ public class SquareReaderPlugin: CAPPlugin {
         call.resolve(["status":readerStatus, "error":readerError])
     }
     
-//    func showReaders() {
-//            let readerManager = ReaderSDK.shared.readerManager
-//
-//
-//            let readersVC = ReadersViewController(theme: Config.theme, readerManager: readerManager)
-//            readersVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
-//                barButtonSystemItem: .done,
-//                target: self,
-//                action: #selector(didTapDismissReaders)
-//            )
-//
-//            present(
-//                UINavigationController(rootViewController: readersVC),
-//                animated: true,
-//                completion: nil
-//            )
-//        }
+    func makeTheme() -> Theme {
+       let theme = Theme()
+       theme.presentationStyle = .automatic
+       theme.backgroundColor = .black
+       theme.titleColor = .white
+       theme.subtitleColor = .white
+       return theme
+    }
+    
+    private var paymentHandle: PaymentHandle?
+    
+    @objc func startPayment(_ call: CAPPluginCall) {
+        let money = UInt(call.getInt("money") ?? 0)
+        let orderId = call.getString("orderId") ?? ""
+        print("Paying order ID \(orderId)")
+    
+        let paymentParams = PaymentParameters(
+            idempotencyKey: UUID().uuidString,
+            amountMoney: Money(amount: money, currency: .USD)
+        )
+
+        paymentParams.orderID = orderId
+        paymentParams.referenceID = UUID().uuidString
+        
+        DispatchQueue.main.async {
+            self.paymentHandle = ReaderSDK.shared.paymentManager.startPayment(
+                paymentParams,
+                theme: self.makeTheme(),
+                from: self.getTopViewController()!,
+                delegate: self
+            )
+        }
+    }
 }
 
 extension SquareReaderPlugin: ReaderPairingDelegate {
@@ -156,5 +185,89 @@ extension SquareReaderPlugin: ReaderPairingDelegate {
         print("📱 failed to pair")
         readerStatus = "failed"
         readerError = error.localizedDescription
+    }
+}
+
+extension SquareReaderPlugin: PaymentManagerDelegate {
+    public func paymentManager(
+        _ paymentManager: PaymentManager, willFinish payment: Payment) {
+
+        print("""
+        willFinish
+        ID: \(payment.id)
+        Amount: \(payment.amountMoney.amount)
+        Currency: \(payment.amountMoney.currency.currencyCode)
+        Card Brand: \(payment.cardDetails?.card?.cardBrand.description)
+        Last Four: \(payment.cardDetails?.card?.last4 ?? "N/A")
+        Entry Method: \(payment.cardDetails?.entryMethod.description)
+        """)
+    }
+
+    public func paymentManager(
+        _ paymentManager: PaymentManager, didFinish payment: Payment) {
+
+        print("""
+        didFinish
+        ID: \(payment.id)
+        Amount: \(payment.amountMoney.amount)
+        Currency: \(payment.amountMoney.currency.currencyCode)
+        Card Brand: \(payment.cardDetails?.card?.cardBrand.description)
+        Last Four: \(payment.cardDetails?.card?.last4 ?? "N/A")
+        Entry Method: \(payment.cardDetails?.entryMethod.description)
+        """)
+    }
+
+    public func paymentManager(
+        _ paymentManager: PaymentManager, didStart payment: Payment) {
+
+
+        print("""
+        didStart
+        ID: \(payment.id)
+        Amount: \(payment.amountMoney.amount)
+        Currency: \(payment.amountMoney.currency.currencyCode)
+        Card Brand: \(payment.cardDetails?.card?.cardBrand.description)
+        Last Four: \(payment.cardDetails?.card?.last4 ?? "N/A")
+        Entry Method: \(payment.cardDetails?.entryMethod.description)
+        """)
+    }
+    
+    public func paymentManager(_ paymentManager: PaymentManager, didFail payment: Payment, withError error: Error) {
+        print("""
+        didFail withError
+        Payment error: \(error.localizedDescription)
+           ID: \(payment.id)
+           Amount: \(payment.amountMoney.amount)
+           Currency: \(payment.amountMoney.currency.currencyCode)
+           Card Brand: \(payment.cardDetails?.card?.cardBrand.description)
+           Last Four: \(payment.cardDetails?.card?.last4 ?? "N/A")
+           Entry Method: \(payment.cardDetails?.entryMethod.description)
+        """)
+    }
+    
+    public func paymentManager(_ paymentManager: PaymentManager, willCancel payment: Payment) {
+        print("""
+        willCancel
+        Payment will be canceled!
+           ID: \(payment.id)
+           Amount: \(payment.amountMoney.amount)
+           Currency: \(payment.amountMoney.currency.currencyCode)
+           Card Brand: \(payment.cardDetails?.card?.cardBrand.description)
+           Last Four: \(payment.cardDetails?.card?.last4 ?? "N/A")
+           Entry Method: \(payment.cardDetails?.entryMethod.description)
+        """)
+    }
+    
+    public func paymentManager(_ paymentManager: PaymentManager, didCancel payment: Payment) {
+        print("""
+        didCancel
+        Payment canceled!
+           ID: \(payment.id)
+           Amount: \(payment.amountMoney.amount)
+           Currency: \(payment.amountMoney.currency.currencyCode)
+           Card Brand: \(payment.cardDetails?.card?.cardBrand.description)
+           Last Four: \(payment.cardDetails?.card?.last4 ?? "N/A")
+           Entry Method: \(payment.cardDetails?.entryMethod.description)
+        """)
     }
 }
